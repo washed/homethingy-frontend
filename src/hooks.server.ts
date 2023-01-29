@@ -5,7 +5,6 @@ import { error } from '@sveltejs/kit';
 import type { RequestInit } from 'undici';
 import { fetch } from 'undici';
 
-const MY_API_BASE_URL = process.env.API_PROXY_DEST_URL || 'http://localhost:8080';
 const PROXY_PATH = '/api-proxy';
 
 // TODO: a bunch of type errors here, it seems to be fine at runtime, though
@@ -24,10 +23,10 @@ const handleApiProxy: Handle = async ({ event }) => {
 	*/
 
 	// strip `/api-proxy` from the request path
-	const strippedPath = event.url.pathname.substring(PROXY_PATH.length);
+	const strippedPath = event.url.pathname.substring(PROXY_PATH.length + 1);
 
 	// build the new URL path with your API base URL, the stripped path and the query string
-	const urlPath = `${MY_API_BASE_URL}${strippedPath}${event.url.search}`;
+	const urlPath = `${strippedPath}${event.url.search}`;
 	const proxiedUrl = new URL(urlPath);
 
 	// Strip off header added by SvelteKit yet forbidden by underlying HTTP request

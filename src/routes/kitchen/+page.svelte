@@ -5,6 +5,8 @@
 	import { Temporal } from '@js-temporal/polyfill';
 	import { zeroPad2 } from '$lib/util';
 
+	import { PUBLIC_COFFEE_CTL_BASE_URL } from '$env/static/public';
+
 	let timeToAutoOff: Temporal.Duration;
 	$: timeToAutoOffStr =
 		timeToAutoOff != null
@@ -18,20 +20,24 @@
 	$: switchOffAtStr = switchOffAt != null ? new Date(switchOffAt).toLocaleString('de-DE') : '';
 	let switchState: boolean;
 
+	const COFFEE_CTL_BASE_URL = 'http://localhost:8080';
+
+	export const coffeeUrl = (url: string) => `/api-proxy/${PUBLIC_COFFEE_CTL_BASE_URL}${url}`;
+
 	export const switchClick = async (e: MouseEvent) => {
 		if (switchState == true) {
-			await fetch('/api-proxy/off', {
+			await fetch(coffeeUrl('/off'), {
 				method: 'POST'
 			});
 		} else {
-			await fetch('/api-proxy/on', {
+			await fetch(coffeeUrl('/on'), {
 				method: 'POST'
 			});
 		}
 	};
 
-	async function plusDeltaT(tSeconds: number) {
-		await fetch('/api-proxy/timer', {
+	export const plusDeltaT = async (tSeconds: number) => {
+		await fetch(coffeeUrl('/timer'), {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',
@@ -39,7 +45,7 @@
 			},
 			body: JSON.stringify({ delta: tSeconds * 10e8 })
 		});
-	}
+	};
 
 	export const plus15min = async () => await plusDeltaT(15 * 60);
 	export const minus15min = async () => await plusDeltaT(-15 * 60);
@@ -47,7 +53,7 @@
 	export const minus60min = async () => await plusDeltaT(-60 * 60);
 
 	function subscribe() {
-		const sse = new EventSource('/api-proxy/timer/stream');
+		const sse = new EventSource(coffeeUrl('/timer/stream'));
 		sse.onmessage = (e) => {
 			const eventData = JSON.parse(e.data);
 			if (eventData.switchOffAt != null) {
@@ -61,7 +67,6 @@
 			switchState = eventData.switchState;
 		};
 		return () => {
-			console.log('calling sse.close()');
 			sse.close();
 		};
 	}
