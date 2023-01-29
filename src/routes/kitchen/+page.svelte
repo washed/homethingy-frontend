@@ -20,8 +20,6 @@
 	$: switchOffAtStr = switchOffAt != null ? new Date(switchOffAt).toLocaleString('de-DE') : '';
 	let switchState: boolean;
 
-	const COFFEE_CTL_BASE_URL = 'http://localhost:8080';
-
 	export const coffeeUrl = (url: string) => `/api-proxy/${PUBLIC_COFFEE_CTL_BASE_URL}${url}`;
 
 	export const switchClick = async (e: MouseEvent) => {
