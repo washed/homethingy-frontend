@@ -5,7 +5,7 @@ import { error } from '@sveltejs/kit';
 import type { RequestInit } from 'undici';
 import { fetch } from 'undici';
 
-const MY_API_BASE_URL = process.env.API_PROXY_DEST_URL;
+const MY_API_BASE_URL = process.env.API_PROXY_DEST_URL || 'http://localhost:8080';
 const PROXY_PATH = '/api-proxy';
 
 // TODO: a bunch of type errors here, it seems to be fine at runtime, though
