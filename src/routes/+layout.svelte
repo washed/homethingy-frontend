@@ -18,24 +18,28 @@
 
 <Theme bind:theme persist persistKey="__carbon-theme" />
 
-<Grid>
-	<Row>
-		<Column>
-			<Tabs>
-				<Tab label="Home" href="/" on:click={() => goto('/')} />
-				<Tab label="Kitchen" href="/kitchen" on:click={() => goto('/kitchen')} />
-			</Tabs>
-		</Column>
-		<Column>
-			<Toggle
-				on:toggle={themeToggle}
-				bind:toggled={themeToggled}
-				labelA="Bright"
-				labelB="Dark"
-				size="sm"
-			/>
-		</Column>
-	</Row>
-</Grid>
-<br />
+<div class="flexed">
+	<div style="display: contents;">
+		<Tabs>
+			<Tab label="Home" href="/" on:click={() => goto('/')} />
+			<Tab label="Kitchen" href="/kitchen" on:click={() => goto('/kitchen')} />
+		</Tabs>
+	</div>
+	<div style="min-width: 6rem;">
+		<Toggle
+			on:toggle={themeToggle}
+			bind:toggled={themeToggled}
+			labelA="Bright"
+			labelB="Dark"
+			size="sm"
+		/>
+	</div>
+</div>
 <slot />
+
+<style>
+	.flexed {
+		display: flex;
+		align-content: space-between;
+	}
+</style>

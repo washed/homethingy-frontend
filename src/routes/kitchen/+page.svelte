@@ -74,15 +74,6 @@
 	});
 </script>
 
-{#if showWarning}
-	<ToastNotification
-		kind="info"
-		title="5 minute warning!"
-		subtitle=""
-		caption={new Date().toLocaleString('de-DE')}
-	/>
-{/if}
-
 <Grid>
 	<Row>
 		<Column><Toggle bind:toggled={switchState} on:click={switchClick} /></Column>
@@ -98,3 +89,13 @@
 		<Column><Button on:click={minus60min}>-60 min</Button></Column>
 	</Row>
 </Grid>
+
+{#if showWarning}
+	<ToastNotification
+		fullWidth
+		kind="info"
+		title="5 minute warning!"
+		subtitle=""
+		caption={new Date().toLocaleString('de-DE')}
+	/>
+{/if}
