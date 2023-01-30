@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import 'carbon-components-svelte/css/all.css';
-	import { Theme, Grid, Row, Column, Toggle, Tabs, Tab } from 'carbon-components-svelte';
+	import { Theme, Tile, Toggle, Tabs, Tab } from 'carbon-components-svelte';
 
 	type CarbonTheme = 'g10' | 'g90';
 	let theme: CarbonTheme = 'g90';
@@ -39,7 +39,7 @@
 
 <div class="flexed">
 	<div style="display: contents;">
-		<Tabs {selected}>
+		<Tabs {selected} autoWidth>
 			{#each TAB_ROUTES as { label, href }, i}
 				<Tab {label} {href} on:click={() => goto(href)} />
 			{/each}
@@ -55,11 +55,15 @@
 		/>
 	</div>
 </div>
-<slot />
+
+<Tile>
+	<slot />
+</Tile>
 
 <style>
 	.flexed {
 		display: flex;
 		align-content: space-between;
+		column-gap: 1rem;
 	}
 </style>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Toggle, Grid, Column, Row, Button, ToastNotification } from 'carbon-components-svelte';
+	import { Toggle, Button, ToastNotification } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 	import { Temporal } from '@js-temporal/polyfill';
 	import { zeroPad2 } from '$lib/util';
@@ -74,21 +74,21 @@
 	});
 </script>
 
-<Grid>
-	<Row>
-		<Column><Toggle bind:toggled={switchState} on:click={switchClick} /></Column>
-	</Row>
-	<Row><Column>Auto-Off um</Column><Column>{switchOffAtStr}</Column></Row>
-	<Row><Column>Zeit bis Auto-Off</Column><Column>{timeToAutoOffStr}</Column></Row>
-	<Row>
-		<Column><Button on:click={plus15min}>+15 min</Button></Column>
-		<Column><Button on:click={minus15min}>-15 min</Button></Column>
-	</Row>
-	<Row>
-		<Column><Button on:click={plus60min}>+60 min</Button></Column>
-		<Column><Button on:click={minus60min}>-60 min</Button></Column>
-	</Row>
-</Grid>
+<div class="flex-col">
+	<div><Toggle bind:toggled={switchState} on:click={switchClick} /></div>
+	<div>
+		<Button on:click={plus15min}>+15 min</Button>
+		<Button on:click={minus15min}>-15 min</Button>
+	</div>
+	<div>
+		<Button on:click={plus60min}>+60 min</Button>
+		<Button on:click={minus60min}>-60 min</Button>
+	</div>
+	<div>Zeit bis Auto-Off: {timeToAutoOffStr}</div>
+	{#if switchOffAtStr !== ''}
+		<div>Auto-Off um {switchOffAtStr}</div>
+	{/if}
+</div>
 
 {#if showWarning}
 	<ToastNotification
@@ -99,3 +99,14 @@
 		caption={new Date().toLocaleString('de-DE')}
 	/>
 {/if}
+
+<style>
+	.flex-col {
+		display: flex;
+		align-content: center;
+		flex-direction: column;
+		row-gap: 1rem;
+		align-items: center;
+		justify-content: center;
+	}
+</style>
