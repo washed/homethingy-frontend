@@ -37,28 +37,34 @@
 
 <Theme bind:theme persist persistKey="__carbon-theme" />
 
-<div class="flexed">
-	<div style="display: contents;">
-		<Tabs {selected} autoWidth>
-			{#each TAB_ROUTES as { label, href }, i}
-				<Tab {label} {href} on:click={() => goto(href)} />
-			{/each}
-		</Tabs>
-	</div>
-	<div style="min-width: 6rem;">
-		<Toggle
-			on:toggle={themeToggle}
-			bind:toggled={themeToggled}
-			labelA="Bright"
-			labelB="Dark"
-			size="sm"
-		/>
-	</div>
+<div style="padding: 0.5rem;">
+	<Tile>
+		<div class="flexed">
+			<div style="display: contents;">
+				<Tabs {selected} autoWidth>
+					{#each TAB_ROUTES as { label, href }, i}
+						<Tab {label} {href} on:click={() => goto(href)} />
+					{/each}
+				</Tabs>
+			</div>
+			<div style="min-width: 6rem;">
+				<Toggle
+					on:toggle={themeToggle}
+					bind:toggled={themeToggled}
+					labelA="Bright"
+					labelB="Dark"
+					size="sm"
+				/>
+			</div>
+		</div>
+	</Tile>
 </div>
 
-<Tile>
-	<slot />
-</Tile>
+<div style="padding: 0 0.5rem 0.5rem 0.5rem;">
+	<Tile>
+		<slot />
+	</Tile>
+</div>
 
 <style>
 	.flexed {

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Toggle, Button, ToastNotification } from 'carbon-components-svelte';
+	import { Toggle, Button, ToastNotification, ProgressBar } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 	import { Temporal } from '@js-temporal/polyfill';
 	import { zeroPad2 } from '$lib/util';
@@ -16,7 +16,8 @@
 	$: showWarning = timeToAutoOff != null ? timeToAutoOff.total('minute') < 5 : false;
 
 	let switchOffAt: Date | null;
-	$: switchOffAtStr = switchOffAt != null ? new Date(switchOffAt).toLocaleString('de-DE') : '';
+	$: switchOffAtStr =
+		switchOffAt != null ? new Date(switchOffAt).toLocaleString('de-DE').replace(',', ' ') : '';
 	let switchState: boolean;
 
 	export const coffeeUrl = (url: string) => `/api-proxy/${PUBLIC_COFFEE_CTL_BASE_URL}${url}`;
@@ -74,39 +75,70 @@
 	});
 </script>
 
-<div class="flex-col">
-	<div><Toggle bind:toggled={switchState} on:click={switchClick} /></div>
-	<div>
-		<Button on:click={plus15min}>+15 min</Button>
-		<Button on:click={minus15min}>-15 min</Button>
-	</div>
-	<div>
-		<Button on:click={plus60min}>+60 min</Button>
-		<Button on:click={minus60min}>-60 min</Button>
-	</div>
-	<div>Zeit bis Auto-Off: {timeToAutoOffStr}</div>
-	{#if switchOffAtStr !== ''}
-		<div>Auto-Off um {switchOffAtStr}</div>
-	{/if}
-</div>
+<div class="flex-row centered">
+	<div class="flex-col">
+		<div><Toggle bind:toggled={switchState} on:click={switchClick} /></div>
+		<div class="flex-item">
+			<Button on:click={plus15min}>+15 min</Button>
+			<Button on:click={minus15min}>-15 min</Button>
+		</div>
+		<div class="flex-item">
+			<Button on:click={plus60min}>+60 min</Button>
+			<Button on:click={minus60min}>-60 min</Button>
+		</div>
+		<div class="flex-row" style="width: 100%;">
+			<div class="flex-item">Zeit bis Auto-Off</div>
+			<div style="text-align: right;">{timeToAutoOffStr}</div>
+		</div>
 
-{#if showWarning}
-	<ToastNotification
-		fullWidth
-		kind="info"
-		title="5 minute warning!"
-		subtitle=""
-		caption={new Date().toLocaleString('de-DE')}
-	/>
-{/if}
+		{#if switchOffAtStr !== ''}
+			<div class="flex-row" style="width: 100%;">
+				<div class="flex-item">Auto-Off um</div>
+				<div style="text-align: right;">{switchOffAtStr}</div>
+			</div>
+		{/if}
+		<div class="flex-item">
+			<ProgressBar value={50} max={100} labelText="Button Battery" />
+		</div>
+		{#if showWarning}
+			<ToastNotification
+				fullWidth
+				kind="info"
+				title="5 minute warning!"
+				subtitle=""
+				caption={new Date().toLocaleString('de-DE')}
+			/>
+		{/if}
+	</div>
+</div>
 
 <style>
 	.flex-col {
 		display: flex;
 		align-content: center;
 		flex-direction: column;
-		row-gap: 1rem;
+		row-gap: 0.75rem;
 		align-items: center;
 		justify-content: center;
+	}
+
+	.flex-row {
+		display: flex;
+		align-content: space-between;
+		row-gap: 0.75rem;
+	}
+
+	.centered {
+		align-items: center;
+		justify-content: center;
+	}
+
+	.flex-item {
+		display: flex;
+		width: 100%;
+		column-gap: 0.75rem;
+		justify-content: stretch;
+		align-items: center;
+		align-content: center;
 	}
 </style>
