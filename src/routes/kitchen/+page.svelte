@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Toggle, Button, ToastNotification, ProgressBar } from 'carbon-components-svelte';
+	import { Toggle, Button, ToastNotification, Loading } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 	import { Temporal } from '@js-temporal/polyfill';
 	import { zeroPad2 } from '$lib/util';
@@ -18,7 +18,7 @@
 	let switchOffAt: Date | null;
 	$: switchOffAtStr =
 		switchOffAt != null ? new Date(switchOffAt).toLocaleString('de-DE').replace(', ', '\xa0') : '';
-	let switchState: boolean;
+	let switchState: boolean | null = null;
 
 	export const coffeeUrl = (url: string) => `/api-proxy/${PUBLIC_COFFEE_CTL_BASE_URL}${url}`;
 
@@ -52,7 +52,19 @@
 
 	function subscribe() {
 		const sse = new EventSource(coffeeUrl('/timer/stream'));
-		sse.onmessage = (e) => {
+		sse.onerror = async (e: Event) => {
+			console.log('error connecting to coffee-ctl backend, retrying...');
+			sse.close();
+
+			const timeout = setTimeout(async () => {
+				console.log('Retrying coffe-ctl backend connection');
+				// await invalidateAll(); this might work if we somehow use a load fn
+				// Not pretty, but for now it works
+				window.location.reload();
+			}, 3000);
+			console.log('maybe did the thing!');
+		};
+		sse.onmessage = (e: MessageEvent) => {
 			const eventData = JSON.parse(e.data);
 			if (eventData.switchOffAt != null) {
 			}
@@ -79,42 +91,48 @@
 
 <div class="flex-row centered">
 	<div class="flex-col">
-		<div class="flex-item">
-			<div style="margin: auto;"><Toggle bind:toggled={switchState} on:click={switchClick} /></div>
-		</div>
-		<div class="flex-item">
-			<Button on:click={plus15min}>+15 min</Button>
-			<Button on:click={minus15min}>-15 min</Button>
-		</div>
-		<div class="flex-item">
-			<Button on:click={plus60min}>+60 min</Button>
-			<Button on:click={minus60min}>-60 min</Button>
-		</div>
-		<div class="flex-row" style="width: 100%;">
-			<div class="flex-item">Zeit bis Auto-Off</div>
-			<div style="text-align: right;">{timeToAutoOffStr}</div>
-		</div>
-
-		{#if switchOffAtStr !== ''}
-			<div class="flex-row" style="width: 100%;">
-				<div class="flex-item">Auto-Off um</div>
-				<div style="text-align: right;">{switchOffAtStr}</div>
+		{#if switchState == null}
+			<div><Loading withOverlay={false} /></div>
+		{:else}
+			<div class="flex-item">
+				<div style="margin: auto;">
+					<Toggle bind:toggled={switchState} on:click={switchClick} />
+				</div>
 			</div>
-		{/if}
+			<div class="flex-item">
+				<Button on:click={plus15min}>+15 min</Button>
+				<Button on:click={minus15min}>-15 min</Button>
+			</div>
+			<div class="flex-item">
+				<Button on:click={plus60min}>+60 min</Button>
+				<Button on:click={minus60min}>-60 min</Button>
+			</div>
+			<div class="flex-row" style="width: 100%;">
+				<div class="flex-item">Zeit bis Auto-Off</div>
+				<div style="text-align: right;">{timeToAutoOffStr}</div>
+			</div>
 
-		<div class="flex-row" style="width: 100%;">
-			<div class="flex-item">Button Battery SoC</div>
-			<div style="text-align: right;">{buttonBatterySoC}&nbsp;%</div>
-		</div>
+			{#if switchOffAtStr !== ''}
+				<div class="flex-row" style="width: 100%;">
+					<div class="flex-item">Auto-Off um</div>
+					<div style="text-align: right;">{switchOffAtStr}</div>
+				</div>
+			{/if}
 
-		{#if showWarning}
-			<ToastNotification
-				fullWidth
-				kind="info"
-				title="5 minute warning!"
-				subtitle=""
-				caption={new Date().toLocaleString('de-DE')}
-			/>
+			<div class="flex-row" style="width: 100%;">
+				<div class="flex-item">Button Battery SoC</div>
+				<div style="text-align: right;">{buttonBatterySoC}&nbsp;%</div>
+			</div>
+
+			{#if showWarning}
+				<ToastNotification
+					fullWidth
+					kind="info"
+					title="5 minute warning!"
+					subtitle=""
+					caption={new Date().toLocaleString('de-DE')}
+				/>
+			{/if}
 		{/if}
 	</div>
 </div>
