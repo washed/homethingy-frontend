@@ -17,7 +17,7 @@
 
 	let switchOffAt: Date | null;
 	$: switchOffAtStr =
-		switchOffAt != null ? new Date(switchOffAt).toLocaleString('de-DE').replace(',', ' ') : '';
+		switchOffAt != null ? new Date(switchOffAt).toLocaleString('de-DE').replace(', ', '\xa0') : '';
 	let switchState: boolean;
 
 	export const coffeeUrl = (url: string) => `/api-proxy/${PUBLIC_COFFEE_CTL_BASE_URL}${url}`;
@@ -73,11 +73,15 @@
 		const unsub = subscribe();
 		return unsub;
 	});
+
+	let buttonBatterySoC: number = 20; // TODO: get actual value from backend
 </script>
 
 <div class="flex-row centered">
 	<div class="flex-col">
-		<div><Toggle bind:toggled={switchState} on:click={switchClick} /></div>
+		<div class="flex-item">
+			<div style="margin: auto;"><Toggle bind:toggled={switchState} on:click={switchClick} /></div>
+		</div>
 		<div class="flex-item">
 			<Button on:click={plus15min}>+15 min</Button>
 			<Button on:click={minus15min}>-15 min</Button>
@@ -97,9 +101,12 @@
 				<div style="text-align: right;">{switchOffAtStr}</div>
 			</div>
 		{/if}
-		<div class="flex-item">
-			<ProgressBar value={50} max={100} labelText="Button Battery" />
+
+		<div class="flex-row" style="width: 100%;">
+			<div class="flex-item">Button Battery SoC</div>
+			<div style="text-align: right;">{buttonBatterySoC}&nbsp;%</div>
 		</div>
+
 		{#if showWarning}
 			<ToastNotification
 				fullWidth
@@ -117,7 +124,7 @@
 		display: flex;
 		align-content: center;
 		flex-direction: column;
-		row-gap: 0.75rem;
+		row-gap: 1rem;
 		align-items: center;
 		justify-content: center;
 	}
