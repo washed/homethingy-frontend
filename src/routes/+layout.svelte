@@ -1,26 +1,19 @@
 <script lang="ts">
-	import 'carbon-components-svelte/css/g90.css';
-	import 'carbon-components-svelte/css/g10.css';
-	import {
-		Theme,
-		RadioButtonGroup,
-		RadioButton,
-		Breadcrumb,
-		BreadcrumbItem,
-		OverflowMenu,
-		OverflowMenuItem,
-		Grid,
-		Row,
-		Column
-	} from 'carbon-components-svelte';
+	import { goto } from '$app/navigation';
+	import 'carbon-components-svelte/css/all.css';
+	import { Theme, Grid, Row, Column, Toggle, Tabs, Tab } from 'carbon-components-svelte';
 
 	type CarbonTheme = 'g10' | 'g90';
-
 	let theme: CarbonTheme = 'g90';
-	let value = 0;
-	let paths = $page.url.pathname.replace(/^\/|\/$/g, '').split('/');
+	$: themeToggled = theme == 'g90';
 
-	import { page } from '$app/stores';
+	export const themeToggle = async (e: CustomEvent<{ toggled: boolean }>) => {
+		if (e.detail.toggled == true) {
+			theme = 'g90';
+		} else {
+			theme = 'g10';
+		}
+	};
 </script>
 
 <Theme bind:theme persist persistKey="__carbon-theme" />
@@ -28,24 +21,21 @@
 <Grid>
 	<Row>
 		<Column>
-			<OverflowMenu>
-				<OverflowMenuItem href="/kitchen" text="Kitchen" />
-			</OverflowMenu>
+			<Tabs>
+				<Tab label="Home" href="/" on:click={() => goto('/')} />
+				<Tab label="Kitchen" href="/kitchen" on:click={() => goto('/kitchen')} />
+			</Tabs>
 		</Column>
 		<Column>
-			<RadioButtonGroup legendText="Carbon theme" bind:selected={theme}>
-				<RadioButton labelText="Dark" value="g90" />
-				<RadioButton labelText="Bright" value="g10" />
-			</RadioButtonGroup>
+			<Toggle
+				on:toggle={themeToggle}
+				bind:toggled={themeToggled}
+				labelA="Bright"
+				labelB="Dark"
+				size="sm"
+			/>
 		</Column>
 	</Row>
-	<Row>
-		<Breadcrumb noTrailingSlash>
-			<BreadcrumbItem href="/">home</BreadcrumbItem>
-			{#each paths as path, i}
-				<BreadcrumbItem href={paths.slice(0, i + 1).join('/')}>{path}</BreadcrumbItem>
-			{/each}
-		</Breadcrumb>
-	</Row>
 </Grid>
-<div><slot /></div>
+<br />
+<slot />

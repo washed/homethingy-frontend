@@ -1,5 +1,4 @@
 <script lang="ts">
-	import 'carbon-components-svelte/css/all.css';
 	import { Toggle, Grid, Column, Row, Button, ToastNotification } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 	import { Temporal } from '@js-temporal/polyfill';
@@ -75,8 +74,6 @@
 	});
 </script>
 
-<h1>Kitchen - Coffee Machine</h1>
-
 {#if showWarning}
 	<ToastNotification
 		kind="info"
@@ -88,7 +85,7 @@
 
 <Grid>
 	<Row>
-		<Column><Toggle labelText="On/Off" bind:toggled={switchState} on:click={switchClick} /></Column>
+		<Column><Toggle bind:toggled={switchState} on:click={switchClick} /></Column>
 	</Row>
 	<Row><Column>Auto-Off um</Column><Column>{switchOffAtStr}</Column></Row>
 	<Row><Column>Zeit bis Auto-Off</Column><Column>{timeToAutoOffStr}</Column></Row>
