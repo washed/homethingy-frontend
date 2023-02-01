@@ -5,10 +5,10 @@ WORKDIR /usr/src/app/
 COPY package.json /usr/src/app/package.json
 RUN npm install
 
-FROM dev as prod-install
+FROM --platform=$BUILDPLATFORM dev as prod-install
 RUN npm ci --omit=dev
 
-FROM dev as build
+FROM --platform=$BUILDPLATFORM dev as build
 COPY . /usr/src/app/
 RUN npm run build
 
