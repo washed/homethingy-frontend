@@ -3,8 +3,7 @@
 	import { onMount } from 'svelte';
 	import { Temporal } from '@js-temporal/polyfill';
 	import { zeroPad2 } from '$lib/util';
-
-	import { PUBLIC_COFFEE_CTL_BASE_URL } from '$env/dynamic/public';
+	import { env } from '$env/dynamic/public';
 
 	let timeToAutoOff: Temporal.Duration;
 	$: timeToAutoOffStr =
@@ -20,7 +19,7 @@
 		switchOffAt != null ? new Date(switchOffAt).toLocaleString('de-DE').replace(', ', '\xa0') : '';
 	let switchState: boolean | null = null;
 
-	export const coffeeUrl = (url: string) => `/api-proxy/${PUBLIC_COFFEE_CTL_BASE_URL}${url}`;
+	export const coffeeUrl = (url: string) => `/api-proxy/${env.PUBLIC_COFFEE_CTL_BASE_URL}${url}`;
 
 	export const switchClick = async (e: MouseEvent) => {
 		if (switchState == true) {
