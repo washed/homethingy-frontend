@@ -4,7 +4,7 @@
 	import { Temporal } from '@js-temporal/polyfill';
 	import { zeroPad2 } from '$lib/util';
 
-	import { PUBLIC_COFFEE_CTL_BASE_URL } from '$env/static/public';
+	import { PUBLIC_COFFEE_CTL_BASE_URL } from '$env/dynamic/public';
 
 	let timeToAutoOff: Temporal.Duration;
 	$: timeToAutoOffStr =
