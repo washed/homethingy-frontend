@@ -19,6 +19,9 @@
 		switchOffAt != null ? new Date(switchOffAt).toLocaleString('de-DE').replace(', ', '\xa0') : '';
 	let switchState: boolean | null = null;
 
+	let buttonBatterySoC: number | null = null;
+	$: buttonBatterySoCStr = buttonBatterySoC != null ? `${buttonBatterySoC}\xa0%` : 'N/A';
+
 	export const coffeeUrl = (url: string) => `/api-proxy/${env.PUBLIC_COFFEE_CTL_BASE_URL}${url}`;
 
 	export const switchClick = async (e: MouseEvent) => {
@@ -74,6 +77,8 @@
 				largestUnit: 'hour'
 			});
 			switchState = eventData.switchState;
+
+			buttonBatterySoC = eventData.buttonBatterySoC;
 		};
 		return () => {
 			sse.close();
@@ -84,8 +89,6 @@
 		const unsub = subscribe();
 		return unsub;
 	});
-
-	let buttonBatterySoC: number = 20; // TODO: get actual value from backend
 </script>
 
 <div class="flex-row centered">
@@ -120,7 +123,7 @@
 
 			<div class="flex-row" style="width: 100%;">
 				<div class="flex-item">Button Battery SoC</div>
-				<div style="text-align: right;">{buttonBatterySoC}&nbsp;%</div>
+				<div style="text-align: right;">{buttonBatterySoCStr}</div>
 			</div>
 
 			{#if showWarning}
