@@ -44,6 +44,8 @@ const handleApiProxy: Handle = async ({ event }) => {
 		requestInit.duplex = 'half';
 	}
 
+	console.log('Proxying request to', proxiedUrl);
+
 	return fetch(proxiedUrl.toString(), requestInit).catch((err) => {
 		console.log('Could not proxy API request: ', err);
 		throw err;
