@@ -5,27 +5,54 @@
 	import { zeroPad2 } from '$lib/util';
 	import { env } from '$env/dynamic/public';
 
-	let timeToAutoOff: Temporal.Duration;
-	$: timeToAutoOffStr =
-		timeToAutoOff != null
-			? `${zeroPad2(timeToAutoOff.hours)}:${zeroPad2(timeToAutoOff.minutes)}:${zeroPad2(
-					timeToAutoOff.seconds
-			  )}`
-			: '';
-	$: showWarning = timeToAutoOff != null ? timeToAutoOff.total('minute') < 5 : false;
+	interface SwitchOffAtStatus {
+		time: Date;
+		valid: boolean;
+	}
 
-	let switchOffAt: Date | null;
-	$: switchOffAtStr =
-		switchOffAt != null ? new Date(switchOffAt).toLocaleString('de-DE').replace(', ', '\xa0') : '';
-	let switchState: boolean | null = null;
+	interface ButtonBatteryStatus {
+		soc: number;
+		valid: boolean;
+	}
 
-	let buttonBatterySoC: number | null = null;
-	$: buttonBatterySoCStr = buttonBatterySoC != null ? `${buttonBatterySoC}\xa0%` : 'N/A';
+	interface TimerStatus {
+		countdownNs: number;
+		switchOffAtStatus: SwitchOffAtStatus;
+		countdownRunning: boolean;
+		intendedSwitchState: boolean;
+		switchState: boolean;
+		buttonBatteryStatus: ButtonBatteryStatus;
+	}
+
+	let timerStatus: TimerStatus | null = null;
+
+	$: countdownNsDuration = timerStatus
+		? Temporal.Duration.from({
+				nanoseconds: timerStatus!.countdownNs
+		  }).round({
+				largestUnit: 'hour'
+		  })
+		: null;
+	$: timeToAutoOffStr = countdownNsDuration
+		? `${zeroPad2(countdownNsDuration.hours)}:${zeroPad2(countdownNsDuration.minutes)}:${zeroPad2(
+				countdownNsDuration.seconds
+		  )}`
+		: '--:--:--';
+
+	$: showWarning = countdownNsDuration ? countdownNsDuration.total('minute') < 5 : false;
+
+	$: switchOffAtStr = timerStatus?.switchOffAtStatus.valid
+		? new Date(timerStatus?.switchOffAtStatus.time).toLocaleString('de-DE').replace(', ', '\xa0')
+		: '';
+
+	$: buttonBatterySoCStr = timerStatus?.buttonBatteryStatus.valid
+		? `${timerStatus?.buttonBatteryStatus.soc}\xa0%`
+		: 'N/A';
 
 	export const coffeeUrl = (url: string) => `/api-proxy/${env.PUBLIC_COFFEE_CTL_BASE_URL}${url}`;
 
 	export const switchClick = async (e: MouseEvent) => {
-		if (switchState == true) {
+		if (timerStatus!.switchState == true) {
 			await fetch(coffeeUrl('/off'), {
 				method: 'POST'
 			});
@@ -67,18 +94,7 @@
 			console.log('maybe did the thing!');
 		};
 		sse.onmessage = (e: MessageEvent) => {
-			const eventData = JSON.parse(e.data);
-			if (eventData.switchOffAt != null) {
-			}
-
-			switchOffAt = eventData.switchOffAt != null ? new Date(eventData.switchOffAt) : null;
-
-			timeToAutoOff = Temporal.Duration.from({ nanoseconds: eventData.countdownNs }).round({
-				largestUnit: 'hour'
-			});
-			switchState = eventData.switchState;
-
-			buttonBatterySoC = eventData.buttonBatterySoC;
+			timerStatus = JSON.parse(e.data);
 		};
 		return () => {
 			sse.close();
@@ -93,12 +109,12 @@
 
 <div class="flex-row centered">
 	<div class="flex-col">
-		{#if switchState == null}
+		{#if timerStatus == null}
 			<div><Loading withOverlay={false} /></div>
 		{:else}
 			<div class="flex-item">
 				<div style="margin: auto;">
-					<Toggle bind:toggled={switchState} on:click={switchClick} />
+					<Toggle bind:toggled={timerStatus.switchState} on:click={switchClick} />
 				</div>
 			</div>
 			<div class="flex-item">
