@@ -52,6 +52,7 @@
 	export const coffeeUrl = (url: string) => `/api-proxy/${env.PUBLIC_COFFEE_CTL_BASE_URL}${url}`;
 
 	export const switchClick = async (e: MouseEvent) => {
+		e.preventDefault();
 		console.log('mouse event', e);
 		if (timerStatus!.switchState == true) {
 			await fetch(coffeeUrl('/off'), {
