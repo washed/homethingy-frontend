@@ -29,6 +29,10 @@
 		{
 			label: 'Kitchen',
 			href: '/kitchen'
+		},
+		{
+			label: 'Office',
+			href: '/office'
 		}
 	];
 
