@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Toggle, Button, ToastNotification, Loading } from 'carbon-components-svelte';
+	import { Toggle, Button, ToastNotification, Loading, Tile } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 	import { Temporal } from '@js-temporal/polyfill';
 	import { zeroPad2 } from '$lib/util';
@@ -109,53 +109,55 @@
 	});
 </script>
 
-<div class="flex-row centered">
-	<div class="flex-col">
-		{#if timerStatus == null}
-			<div><Loading withOverlay={false} /></div>
-		{:else}
-			<div class="flex-item">
-				<div style="margin: auto;">
-					<Toggle bind:toggled={timerStatus.switchState} on:click={switchClick} />
+<Tile>
+	<div class="flex-row centered">
+		<div class="flex-col">
+			{#if timerStatus == null}
+				<div><Loading withOverlay={false} /></div>
+			{:else}
+				<div class="flex-item">
+					<div style="margin: auto;">
+						<Toggle bind:toggled={timerStatus.switchState} on:click={switchClick} />
+					</div>
 				</div>
-			</div>
-			<div class="flex-item">
-				<Button on:click={plus15min}>+15 min</Button>
-				<Button on:click={minus15min}>-15 min</Button>
-			</div>
-			<div class="flex-item">
-				<Button on:click={plus60min}>+60 min</Button>
-				<Button on:click={minus60min}>-60 min</Button>
-			</div>
-			<div class="flex-row" style="width: 100%;">
-				<div class="flex-item">Zeit bis Auto-Off</div>
-				<div style="text-align: right;">{timeToAutoOffStr}</div>
-			</div>
-
-			{#if switchOffAtStr !== ''}
+				<div class="flex-item">
+					<Button on:click={plus15min}>+15 min</Button>
+					<Button on:click={minus15min}>-15 min</Button>
+				</div>
+				<div class="flex-item">
+					<Button on:click={plus60min}>+60 min</Button>
+					<Button on:click={minus60min}>-60 min</Button>
+				</div>
 				<div class="flex-row" style="width: 100%;">
-					<div class="flex-item">Auto-Off um</div>
-					<div style="text-align: right;">{switchOffAtStr}</div>
+					<div class="flex-item">Zeit bis Auto-Off</div>
+					<div style="text-align: right;">{timeToAutoOffStr}</div>
 				</div>
-			{/if}
 
-			<div class="flex-row" style="width: 100%;">
-				<div class="flex-item">Button Battery SoC</div>
-				<div style="text-align: right;">{buttonBatterySoCStr}</div>
-			</div>
+				{#if switchOffAtStr !== ''}
+					<div class="flex-row" style="width: 100%;">
+						<div class="flex-item">Auto-Off um</div>
+						<div style="text-align: right;">{switchOffAtStr}</div>
+					</div>
+				{/if}
 
-			{#if showWarning}
-				<ToastNotification
-					fullWidth
-					kind="info"
-					title="5 minute warning!"
-					subtitle=""
-					caption={new Date().toLocaleString('de-DE')}
-				/>
+				<div class="flex-row" style="width: 100%;">
+					<div class="flex-item">Button Battery SoC</div>
+					<div style="text-align: right;">{buttonBatterySoCStr}</div>
+				</div>
+
+				{#if showWarning}
+					<ToastNotification
+						fullWidth
+						kind="info"
+						title="5 minute warning!"
+						subtitle=""
+						caption={new Date().toLocaleString('de-DE')}
+					/>
+				{/if}
 			{/if}
-		{/if}
+		</div>
 	</div>
-</div>
+</Tile>
 
 <style>
 	.flex-col {

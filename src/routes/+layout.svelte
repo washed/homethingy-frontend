@@ -31,6 +31,14 @@
 			href: '/kitchen'
 		},
 		{
+			label: 'Living Room',
+			href: '/living-room'
+		},
+		{
+			label: 'Bathroom',
+			href: '/bathroom'
+		},
+		{
 			label: 'Office',
 			href: '/office'
 		}
@@ -65,9 +73,7 @@
 </div>
 
 <div style="padding: 0 0.5rem 0.5rem 0.5rem;">
-	<Tile>
-		<slot />
-	</Tile>
+	<slot />
 </div>
 
 <style>

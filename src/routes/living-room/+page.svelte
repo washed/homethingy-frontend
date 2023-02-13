@@ -2,4 +2,4 @@
 	import HeatingUi from '$lib/HeatingUI.svelte';
 </script>
 
-<HeatingUi controllerName="office" />
+<HeatingUi controllerName="living-room" />
