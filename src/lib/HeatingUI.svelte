@@ -4,6 +4,7 @@
 	import { Loading, Tile, Toggle, Accordion, AccordionItem } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 	import { env } from '$env/dynamic/public';
+	import '$lib/style.css';
 
 	interface Dw2StatusAgg {
 		windowOpen: boolean;
@@ -107,7 +108,7 @@
 
 <Tile>
 	<div class="flex-row centered">
-		<div class="flex-col" style="width:18rem;">
+		<div class="flex-col main-col">
 			{#if heatingStatus == null}
 				<div><Loading withOverlay={false} /></div>
 			{:else}
@@ -166,34 +167,3 @@
 		</div>
 	</div>
 </Tile>
-
-<style>
-	.flex-col {
-		display: flex;
-		align-content: center;
-		flex-direction: column;
-		row-gap: 1rem;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.flex-row {
-		display: flex;
-		align-content: space-between;
-		row-gap: 0.75rem;
-	}
-
-	.centered {
-		align-items: center;
-		justify-content: center;
-	}
-
-	.flex-item {
-		display: flex;
-		width: 100%;
-		column-gap: 0.75rem;
-		justify-content: stretch;
-		align-items: center;
-		align-content: center;
-	}
-</style>
