@@ -1,7 +1,14 @@
 <script lang="ts">
 	export let controllerName: string;
 
-	import { Loading, Tile, Toggle, Accordion, AccordionItem } from 'carbon-components-svelte';
+	import {
+		Loading,
+		Tile,
+		Toggle,
+		Accordion,
+		AccordionItem,
+		OutboundLink
+	} from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 	import { env } from '$env/dynamic/public';
 	import '$lib/style.css';
@@ -161,6 +168,37 @@
 								/>
 							</div>
 						</div>
+					</AccordionItem>
+					<AccordionItem title="Details">
+						{#each Object.entries(heatingStatus.trvStatus) as [key, value]}
+							<div class="flex-row" style="width: 100%;">
+								<div class="flex-item">ShellyTRV</div>
+								<div style="text-align: right;">
+									<OutboundLink href="http://shellytrv-{key}/">{key}</OutboundLink>
+								</div>
+							</div>
+							<div class="flex-row" style="width: 100%;">
+								<div class="flex-item">Temperatur</div>
+								<div style="text-align: right;">{value.temperature}&nbsp;°C</div>
+							</div>
+							<div class="flex-row" style="width: 100%;">
+								<div class="flex-item">Zieltemperatur</div>
+								<div style="text-align: right;">
+									{value.targetTemperature}&nbsp;°C
+								</div>
+							</div>
+						{/each}
+
+						{#each Object.entries(heatingStatus.dw2Status) as [key, value]}
+							<div class="flex-row" style="width: 100%;">
+								<div class="flex-item">ShellyDW2</div>
+								<div style="text-align: right;">{key}</div>
+							</div>
+							<div class="flex-row" style="width: 100%;">
+								<div class="flex-item">Fenster</div>
+								<div style="text-align: right;">{value.windowOpen ? 'offen' : 'geschlossen'}</div>
+							</div>
+						{/each}
 					</AccordionItem>
 				</Accordion>
 			{/if}
