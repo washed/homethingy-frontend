@@ -30,3 +30,7 @@
 .main-col {
     width: 18rem;
 }
+
+.bx--accordion__content {
+    padding-right: 1rem;
+}

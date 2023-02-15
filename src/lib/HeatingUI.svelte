@@ -169,22 +169,24 @@
 							</div>
 						</div>
 					</AccordionItem>
-					<AccordionItem title="Details">
+					<AccordionItem open title="Details">
 						{#each Object.entries(heatingStatus.trvStatus) as [key, value]}
-							<div class="flex-row" style="width: 100%;">
-								<div class="flex-item">ShellyTRV</div>
-								<div style="text-align: right;">
-									<OutboundLink href="http://shellytrv-{key}/">{key}</OutboundLink>
+							<div style="padding: 0 0 1rem 0; width: 100%">
+								<div class="flex-row" style="width: 100%;">
+									<div class="flex-item">ShellyTRV</div>
+									<div style="text-align: right;">
+										<OutboundLink href="http://shellytrv-{key}/">{key}</OutboundLink>
+									</div>
 								</div>
-							</div>
-							<div class="flex-row" style="width: 100%;">
-								<div class="flex-item">Temperatur</div>
-								<div style="text-align: right;">{value.temperature}&nbsp;°C</div>
-							</div>
-							<div class="flex-row" style="width: 100%;">
-								<div class="flex-item">Zieltemperatur</div>
-								<div style="text-align: right;">
-									{value.targetTemperature}&nbsp;°C
+								<div class="flex-row" style="width: 100%;">
+									<div class="flex-item">Temperatur</div>
+									<div style="text-align: right;">{value.temperature}&nbsp;°C</div>
+								</div>
+								<div class="flex-row" style="width: 100%;">
+									<div class="flex-item">Zieltemperatur</div>
+									<div style="text-align: right;">
+										{value.targetTemperature}&nbsp;°C
+									</div>
 								</div>
 							</div>
 						{/each}
@@ -192,7 +194,7 @@
 						{#each Object.entries(heatingStatus.dw2Status) as [key, value]}
 							<div class="flex-row" style="width: 100%;">
 								<div class="flex-item">ShellyDW2</div>
-								<div style="text-align: right;">{key}</div>
+								<OutboundLink href="http://shellydw2-{key}/">{key}</OutboundLink>
 							</div>
 							<div class="flex-row" style="width: 100%;">
 								<div class="flex-item">Fenster</div>
