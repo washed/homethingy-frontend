@@ -84,7 +84,7 @@
 	});
 
 	const setOverride = async (active: boolean, open: boolean) => {
-		await fetch(heatingUrl('/office/window'), {
+		await fetch(heatingUrl(`/${controllerName}/window`), {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',
