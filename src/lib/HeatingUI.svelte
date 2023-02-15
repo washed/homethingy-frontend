@@ -13,13 +13,15 @@
 	import { env } from '$env/dynamic/public';
 	import '$lib/style.css';
 
-	interface Dw2StatusAgg {
-		windowOpen: boolean;
+	interface TRVStatus {
+		targetTemperature: number;
+		targetActive: boolean;
+		valvePosition: number;
+		temperature: number;
 	}
 
-	interface TrvStatusAgg {
-		targetTemperature: number;
-		temperature: number;
+	interface DW2Status {
+		windowOpen: boolean;
 	}
 
 	interface WindowOverride {
@@ -27,29 +29,13 @@
 		active: boolean;
 	}
 
-	interface TrvStatusValue {
-		targetTemperature: number;
-		temperature: number;
-	}
-
-	interface TrvStatus {
-		[key: string]: TrvStatusValue;
-	}
-
-	interface Dw2StatusValue {
-		windowOpen: boolean;
-	}
-
-	interface Dw2Status {
-		[key: string]: Dw2StatusValue;
-	}
-
 	interface HeatingStatus {
-		dw2StatusAgg: Dw2StatusAgg;
-		trvStatusAgg: TrvStatusAgg;
+		dw2StatusAgg: DW2Status;
+		trvStatusAgg: TRVStatus;
 		windowOverride: WindowOverride;
-		trvStatus: TrvStatus;
-		dw2Status: Dw2Status;
+		trvStatus: Record<string, TRVStatus>;
+		trvInfo: Record<string, Object>;
+		dw2Status: Record<string, DW2Status>;
 	}
 
 	let heatingStatus: HeatingStatus | null = null;
@@ -126,8 +112,16 @@
 				<div class="flex-row" style="width: 100%;">
 					<div class="flex-item">Zieltemperatur</div>
 					<div style="text-align: right;">
-						{heatingStatus.trvStatusAgg.targetTemperature}&nbsp;°C
+						{#if heatingStatus.trvStatusAgg.targetActive}
+							{heatingStatus.trvStatusAgg.targetTemperature}&nbsp;°C
+						{:else}
+							<s>{heatingStatus.trvStatusAgg.targetTemperature}&nbsp;°C</s>
+						{/if}
 					</div>
+				</div>
+				<div class="flex-row" style="width: 100%;">
+					<div class="flex-item">Ventilöffnung</div>
+					<div style="text-align: right;">{heatingStatus.trvStatusAgg.valvePosition}&nbsp;%</div>
 				</div>
 				<div class="flex-row" style="width: 100%;">
 					<div class="flex-item">Fenster</div>
@@ -185,7 +179,11 @@
 								<div class="flex-row" style="width: 100%;">
 									<div class="flex-item">Zieltemperatur</div>
 									<div style="text-align: right;">
-										{value.targetTemperature}&nbsp;°C
+										{#if value.targetActive}
+											{value.targetTemperature}&nbsp;°C
+										{:else}
+											<s>{value.targetTemperature}&nbsp;°C</s>
+										{/if}
 									</div>
 								</div>
 							</div>
