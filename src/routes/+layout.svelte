@@ -3,6 +3,35 @@
 	import { page } from '$app/stores';
 	import 'carbon-components-svelte/css/all.css';
 	import { Theme, Tile, Toggle, Tabs, Tab } from 'carbon-components-svelte';
+	import { onMount } from 'svelte';
+	import { pwaInfo } from 'virtual:pwa-info';
+
+	onMount(async () => {
+		if (pwaInfo) {
+			const { registerSW } = await import('virtual:pwa-register');
+			registerSW({
+				immediate: true,
+				onRegistered(r) {
+					// uncomment following code if you want check for updates
+					// r && setInterval(() => {
+					//    console.log('Checking for sw update')
+					//    r.update()
+					// }, 20000 /* 20s for testing purposes */)
+					console.log(`SW Registered: ${r}`);
+				},
+				onRegisterError(error) {
+					console.log('SW registration error', error);
+				}
+			});
+		}
+	});
+
+	let ReloadPrompt;
+	onMount(async () => {
+		pwaInfo && (ReloadPrompt = (await import('$lib/ReloadPrompt.svelte')).default);
+	});
+
+	$: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 
 	type CarbonTheme = 'g10' | 'g90';
 	let theme: CarbonTheme = 'g90';
@@ -46,6 +75,10 @@
 
 	$: selected = TAB_ROUTES.findIndex((value) => value.href == $page.route.id);
 </script>
+
+<svelte:head>
+	{@html webManifest}
+</svelte:head>
 
 <Theme bind:theme persist persistKey="__carbon-theme" />
 
