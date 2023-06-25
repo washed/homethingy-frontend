@@ -10,6 +10,7 @@ const config: UserConfig = {
 			manifest: {
 				name: 'homethingy-frontend',
 				short_name: 'hf',
+				start_url: './kitchen',
 				description: 'My Awesome App description',
 				theme_color: '#ffffff',
 				icons: [
