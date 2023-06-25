@@ -13,6 +13,7 @@ const config: UserConfig = {
 				start_url: './kitchen',
 				description: 'My Awesome App description',
 				theme_color: '#262626',
+				background_color: '#262626',
 				icons: [
 					{
 						src: 'android-chrome-192x192.png',
