@@ -12,7 +12,7 @@ const config: UserConfig = {
 				short_name: 'hf',
 				start_url: './kitchen',
 				description: 'My Awesome App description',
-				theme_color: '#ffffff',
+				theme_color: '#262626',
 				icons: [
 					{
 						src: 'android-chrome-192x192.png',
