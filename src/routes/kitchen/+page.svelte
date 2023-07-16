@@ -50,7 +50,7 @@
 		? `${timerStatus?.buttonBatteryStatus.soc}\xa0%`
 		: 'N/A';
 
-	export const coffeeUrl = (url: string) => `/api-proxy/${env.PUBLIC_COFFEE_CTL_BASE_URL}${url}`;
+	export const coffeeUrl = (url: string) => `/api-proxy/${env.PUBLIC_COFFEE_CTL_BASE_URL}/coffee${url}`;
 
 	export const switchClick = async (e: MouseEvent) => {
 		e.preventDefault();
