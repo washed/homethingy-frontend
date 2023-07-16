@@ -74,6 +74,10 @@
 		{
 			label: 'Office',
 			href: '/office'
+		},
+		{
+			label: 'Garden',
+			href: '/garden'
 		}
 	];
 
