@@ -56,6 +56,10 @@
 			href: '/'
 		},
 		{
+			label: 'Anywhere',
+			href: '/anywhere'
+		},
+		{
 			label: 'Kitchen',
 			href: '/kitchen'
 		},
