@@ -2,4 +2,4 @@
 	import PlugUi from '$lib/PlugUI.svelte';
 </script>
 
-<PlugUi controllerName="coffee" name="Coffee" />
+<PlugUi controllerName="poolPump" name="Pool Pump" />
