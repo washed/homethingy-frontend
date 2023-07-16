@@ -118,6 +118,11 @@
 			{:else}
 				<div class="flex-item">
 					<div style="margin: auto;">
+						<h2>Coffee</h2>
+					</div>
+				</div>
+				<div class="flex-item">
+					<div style="margin: auto;">
 						<Toggle bind:toggled={timerStatus.switchState} on:click={switchClick} />
 					</div>
 				</div>
