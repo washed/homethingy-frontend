@@ -121,7 +121,7 @@
 			{:else}
 				<div class="flex-item">
 					<div style="margin: auto;">
-						<h2>${name}</h2>
+						<h2>{name}</h2>
 					</div>
 				</div>
 				<div class="flex-item">
