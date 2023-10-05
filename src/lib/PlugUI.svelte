@@ -7,7 +7,6 @@
 	import { Temporal } from '@js-temporal/polyfill';
 	import { zeroPad2 } from '$lib/util';
 	import { env } from '$env/dynamic/public';
-	import '$lib/style.css';
 
 	interface SwitchOffAtStatus {
 		time: Date;

@@ -11,7 +11,6 @@
 	} from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 	import { env } from '$env/dynamic/public';
-	import '$lib/style.css';
 
 	interface TRVStatus {
 		targetTemperature: number;

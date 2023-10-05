@@ -5,6 +5,7 @@
 	import { Theme, Tile, Toggle, Tabs, Tab } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 	import { pwaInfo } from 'virtual:pwa-info';
+	import '$lib/style.css';
 
 	onMount(async () => {
 		if (pwaInfo) {
