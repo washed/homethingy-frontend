@@ -118,8 +118,8 @@
 	$: chargingStatus = (() => {
 		if (chargePower !== null && charging !== null) {
 			return chargePower != 0.0
-				? `${charging ? 'charging' : 'discharging'} (${chargePower} W)`
-				: '';
+				? `${batterySoc}% | ${charging ? 'charging' : 'discharging'} (${chargePower} W)`
+				: `${batterySoc}%`;
 		} else {
 			return null;
 		}
