@@ -25,6 +25,7 @@
     justify-content: stretch;
     align-items: center;
     align-content: center;
+    margin: 0.5rem;
 }
 
 .main-col {
@@ -33,4 +34,9 @@
 
 .bx--accordion__content {
     padding-right: 1rem;
+}
+
+.bx--progress-bar__track {
+    background-color: var(--cds-ui-05);
+    width: 12rem;
 }
