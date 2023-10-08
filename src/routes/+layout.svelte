@@ -164,8 +164,19 @@
 <div style="padding: 0.5rem;">
 	<Tile>
 		<div class="flex-row centered">
-			<div class="flex-col main-col">
-				<div class="flex-row" style="width: 100%;">
+			<div class="flex-col">
+				<div class="flex-row">
+					{#if batterySoc !== null && chargingStatus !== null}
+						<div class="flex-item">
+							<ProgressBar value={batterySoc} labelText="Battery SoC" helperText={chargingStatus} />
+						</div>
+					{:else}
+						<div class="flex-item">
+							<InlineLoading description="Loading PV metrics" />
+						</div>
+					{/if}
+				</div>
+				<div class="flex-row">
 					<div class="flex-item">
 						<Tabs {selected} autoWidth>
 							{#each TAB_ROUTES as { label, href }, i}
@@ -173,33 +184,16 @@
 							{/each}
 						</Tabs>
 					</div>
-					<div class="flex-item" style="text-align: right; padding: 0 2.5rem 0 0;">
+					<div class="flex-item">
 						<Toggle
 							on:toggle={themeToggle}
 							bind:toggled={themeToggled}
 							labelA="Bright"
 							labelB="Dark"
 							size="sm"
+							style="padding: 0 2rem 0 0;"
 						/>
 					</div>
-				</div>
-
-				<div class="flex-row">
-					{#if batterySoc !== null && chargingStatus !== null}
-						<div class="flex-item">
-							<div class="flex-item">
-								<ProgressBar
-									value={batterySoc}
-									labelText="Battery SoC"
-									helperText={chargingStatus}
-								/>
-							</div>
-						</div>
-					{:else}
-						<div class="flex-item">
-							<InlineLoading description="Loading PV metrics" />
-						</div>
-					{/if}
 				</div>
 			</div>
 		</div>

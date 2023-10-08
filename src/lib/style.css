@@ -2,7 +2,7 @@
     display: flex;
     align-content: center;
     flex-direction: column;
-    row-gap: 1rem;
+    row-gap: 0rem;
     align-items: center;
     justify-content: center;
 }
@@ -38,5 +38,9 @@
 
 .bx--progress-bar__track {
     background-color: var(--cds-ui-05);
-    width: 12rem;
+    width: 14rem;
+}
+
+.bx--tabs {
+    width: 15rem;
 }
